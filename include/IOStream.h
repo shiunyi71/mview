@@ -24,7 +24,7 @@ public:
     {
         if( !m_ifilestream.is_open() )
         {
-            throw std::logic_error("File doesn\'t exist");
+            throw std::logic_error("File doesn\'t exists");
         }
     }
 
@@ -51,7 +51,7 @@ public:
     // FIX
     void Skip( int bytes )
     {
-        m_ifilestream.ignore( bytes, std::ios_base::cur );
+        m_ifilestream.seekg( bytes, std::ios_base::beg );
     }
 
     template<typename T>
@@ -94,7 +94,7 @@ public:
     {
         if( !m_ofilestream.is_open() )
         {
-            throw std::logic_error("File doesn\'t exist");
+            throw std::logic_error("File doesn\'t exists");
         }
     }
 
@@ -111,6 +111,55 @@ public:
 
 private:
     std::ofstream m_ofilestream;
+};
+
+template<FileAccess FAcess = FileAccess::Read>
+class DefaultStream
+{
+public:
+    DefaultStream( const std::string& filename)
+    : m_default_stream( filename, (std::ios_base::openmode) FAcess )
+    {
+        if( !m_default_stream.is_open() )
+        {
+            throw std::logic_error( "File doesn\'t exists" );
+        }
+    }
+
+    template<typename T>
+    T Get()
+    {
+        if( FAcess & FileAccess::Read )
+        {
+            T chunk;
+            m_default_stream >> chunk;
+            return chunk;
+        }
+        else
+        {
+            throw std::logic_error( "Reading failed. Please set correct file access" );
+        }
+    }
+
+    template<typename T>
+    void Set( T data )
+    {
+        if( FAcess & FileAccess::Write )
+        {
+            m_default_stream << data;
+        }
+        else
+        {
+            throw std::logic_error( "Writting failed. Please set correct file access" );
+        }
+    }
+
+    ~DefaultStream()
+    {
+        m_default_stream.close();
+    }
+private:
+    std::fstream m_default_stream;
 };
 
 }; // end of IOReader

@@ -1,6 +1,6 @@
 #include <vector>
 #include <iostream>
-#include "MViewParser.h"
+#include <MViewParser.h>
 
 int main( int argc, char const *argv[] )
 {
@@ -14,10 +14,11 @@ int main( int argc, char const *argv[] )
         MViewParser parser( file );
         parser.GetPackedFiles();
         parser.ParseScene();
+        parser.GenerateWavefront();
     }
     catch( const std::exception& ex )
     {
-        std::cout << "Exception: " << ex.what() << std::endl; 
+        std::cout << "Exception: " << ex.what() << std::endl;
     }
     return 0;
 }

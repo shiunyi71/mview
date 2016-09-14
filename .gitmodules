@@ -1,3 +1,6 @@
 [submodule "vendors/json"]
 	path = vendors/json
 	url = git@github.com:nlohmann/json.git
+[submodule "vendors/glm"]
+	path = vendors/glm
+	url = git@github.com:g-truc/glm.git
